@@ -44,8 +44,8 @@ public class MeshUtils : MonoBehaviour
 	//////////////
 	public static void CreateEmptyMeshArrays3d(int cubeCount, out Vector3[] vertices, out Vector2[] uvs, out int[] triangles)
 	{
-		vertices = new Vector3[24 * cubeCount];
-		uvs = new Vector2[24 * cubeCount];
+		vertices = new Vector3[8 * cubeCount];
+		uvs = new Vector2[8 * cubeCount];
 		triangles = new int[36 * cubeCount];
 	}
 
@@ -163,9 +163,120 @@ public class MeshUtils : MonoBehaviour
 		triangles[tIndex + 4] = vIndex3;
 		triangles[tIndex + 5] = vIndex2;
 	}
+	public static void AddToMeshArrays3d(Vector3[] vertices, Vector2[] uvs, int[] triangles, int index, Vector3 pos, float rot, Vector3 baseSize, Vector2 uv00, Vector2 uv11)
+	{
+		int vIndex = index * 8;
+		int vIndex0 = vIndex;
+		int vIndex1 = vIndex + 1;
+		int vIndex2 = vIndex + 2;
+		int vIndex3 = vIndex + 3;
+		int vIndex4 = vIndex + 4;
+		int vIndex5 = vIndex + 5;
+		int vIndex6 = vIndex + 6;
+		int vIndex7 = vIndex + 7;
+
+		baseSize *= .5f;
+
+		bool skewed = baseSize.x != baseSize.y;
+		vertices[vIndex0] = pos + GetQuaternionEuler(rot) * new Vector3(-baseSize.x, -baseSize.y, -baseSize.z);
+		vertices[vIndex1] = pos + GetQuaternionEuler(rot) * new Vector3(-baseSize.x, baseSize.y, -baseSize.z);
+		vertices[vIndex2] = pos + GetQuaternionEuler(rot) * new Vector3(baseSize.x, baseSize.y, -baseSize.z);
+		vertices[vIndex3] = pos + GetQuaternionEuler(rot) * new Vector3(baseSize.x, -baseSize.y, -baseSize.z);
+
+		vertices[vIndex4] = pos + GetQuaternionEuler(rot) * new Vector3(-baseSize.x, -baseSize.y, baseSize.z);
+		vertices[vIndex5] = pos + GetQuaternionEuler(rot) * new Vector3(-baseSize.x, baseSize.y, baseSize.z);
+		vertices[vIndex6] = pos + GetQuaternionEuler(rot) * new Vector3(baseSize.x, baseSize.y, baseSize.z);
+		vertices[vIndex7] = pos + GetQuaternionEuler(rot) * new Vector3(baseSize.x, -baseSize.y, baseSize.z);
+
+		uvs[vIndex0] = new Vector2(uv00.x, uv00.y);
+		uvs[vIndex1] = new Vector2(uv11.x, uv00.y);
+		uvs[vIndex2] = new Vector2(uv11.x, uv11.y);
+		uvs[vIndex3] = new Vector2(uv00.x, uv11.y);
+
+		uvs[vIndex3] = new Vector2(uv00.x, uv11.y);
+		uvs[vIndex3] = new Vector2(uv11.x, uv11.y);
+		uvs[vIndex3] = new Vector2(uv11.x, uv00.y);
+		uvs[vIndex3] = new Vector2(uv00.x, uv00.y);
+
+		int tIndex = index * 36; 
+
+		//front
+		triangles[tIndex + 0] = vIndex1;
+		triangles[tIndex + 1] = vIndex2;
+		triangles[tIndex + 2] = vIndex0;
+
+		triangles[tIndex + 3] = vIndex2;
+		triangles[tIndex + 4] = vIndex3;
+		triangles[tIndex + 5] = vIndex0;
+
+		//back	  
+		triangles[tIndex + 6] = vIndex6;
+		triangles[tIndex + 7] = vIndex5;
+		triangles[tIndex + 8] = vIndex4;
+
+		triangles[tIndex + 9] = vIndex4;
+		triangles[tIndex + 10] = vIndex7;
+		triangles[tIndex + 11] = vIndex6;
+
+		//left	  
+		triangles[tIndex + 12] = vIndex4;
+		triangles[tIndex + 13] = vIndex1;
+		triangles[tIndex + 14] = vIndex0;
+
+		triangles[tIndex + 15] = vIndex4;
+		triangles[tIndex + 16] = vIndex5;
+		triangles[tIndex + 17] = vIndex1;
+
+		//right	  
+		triangles[tIndex + 18] = vIndex7;
+		triangles[tIndex + 19] = vIndex3;
+		triangles[tIndex + 20] = vIndex2;
+
+		triangles[tIndex + 21] = vIndex2;
+		triangles[tIndex + 22] = vIndex6;
+		triangles[tIndex + 23] = vIndex7;
+
+		//top	  
+		triangles[tIndex + 24] = vIndex1;
+		triangles[tIndex + 25] = vIndex5;
+		triangles[tIndex + 26] = vIndex2;
+
+		triangles[tIndex + 27] = vIndex5;
+		triangles[tIndex + 28] = vIndex6;
+		triangles[tIndex + 29] = vIndex2;
+
+		//bottom  
+		triangles[tIndex + 30] = vIndex0;
+		triangles[tIndex + 31] = vIndex3;
+		triangles[tIndex + 32] = vIndex4;
+
+		triangles[tIndex + 33] = vIndex3;
+		triangles[tIndex + 34] = vIndex7;
+		triangles[tIndex + 35] = vIndex4;
+
+		/*if (skewed)
+		{
+			vertices[vIndex0] = pos + GetQuaternionEuler(rot) * new Vector3(-baseSize.x, -baseSize.y, -baseSize.z);
+			vertices[vIndex1] = pos + GetQuaternionEuler(rot) * new Vector3(-baseSize.x, baseSize.y, -baseSize.z);
+			vertices[vIndex2] = pos + GetQuaternionEuler(rot) * new Vector3(baseSize.x, baseSize.y, -baseSize.z);
+			vertices[vIndex3] = pos + GetQuaternionEuler(rot) * new Vector3(baseSize.x, -baseSize.y, -baseSize.z);
+
+			vertices[vIndex4] = pos + GetQuaternionEuler(rot) * new Vector3(-baseSize.x, -baseSize.y, baseSize.z);
+			vertices[vIndex5] = pos + GetQuaternionEuler(rot) * new Vector3(-baseSize.x, baseSize.y, baseSize.z);
+			vertices[vIndex6] = pos + GetQuaternionEuler(rot) * new Vector3(baseSize.x, baseSize.y, baseSize.z);
+			vertices[vIndex7] = pos + GetQuaternionEuler(rot) * new Vector3(baseSize.x, -baseSize.y, baseSize.z);
+		}
+		else
+		{
+			vertices[vIndex0] = pos + GetQuaternionEuler(rot - 270) * baseSize;
+			vertices[vIndex1] = pos + GetQuaternionEuler(rot - 180) * baseSize;
+			vertices[vIndex2] = pos + GetQuaternionEuler(rot - 90) * baseSize;
+			vertices[vIndex3] = pos + GetQuaternionEuler(rot - 0) * baseSize;
+		}*/
+	}
 
 	/////////////////
-	public static void AddToMeshArrays3d(Vector3[] vertices, Vector2[] uvs, int[] triangles, int index, Vector3 pos, float rot, Vector3 baseSize, Vector2 uv00, Vector2 uv11)
+	/*public static void AddToMeshArrays3d(Vector3[] vertices, Vector2[] uvs, int[] triangles, int index, Vector3 pos, float rot, Vector3 baseSize, Vector2 uv00, Vector2 uv11)
 	{
 		//Relocate vertices
 		//0123, 4567, 891011
@@ -182,7 +293,7 @@ public class MeshUtils : MonoBehaviour
 		int vIndex6 = vIndex + 2;
 		int vIndex7 = vIndex + 3;
 
-		/*int vIndex8 = vIndex;
+		*//*int vIndex8 = vIndex;
 		int vIndex9 = vIndex + 1;
 		int vIndex10 = vIndex + 2;
 		int vIndex11 = vIndex + 3;
@@ -200,7 +311,7 @@ public class MeshUtils : MonoBehaviour
 		int vIndex20 = vIndex;
 		int vIndex21 = vIndex + 1;
 		int vIndex22 = vIndex + 2;
-		int vIndex23 = vIndex + 3;*/
+		int vIndex23 = vIndex + 3;*//*
 
 		baseSize *= .5f;
 
@@ -217,7 +328,7 @@ public class MeshUtils : MonoBehaviour
 			vertices[vIndex6] = pos + GetQuaternionEuler(rot) * new Vector3(baseSize.x, -baseSize.y, baseSize.z);
 			vertices[vIndex7] = pos + GetQuaternionEuler(rot) * new Vector3(baseSize.x, baseSize.y, baseSize.z);
 
-			/*vertices[vIndex8] = pos + GetQuaternionEuler(rot) * new Vector3(-baseSize.x, baseSize.y);
+			*//*vertices[vIndex8] = pos + GetQuaternionEuler(rot) * new Vector3(-baseSize.x, baseSize.y);
 			vertices[vIndex9] = pos + GetQuaternionEuler(rot) * new Vector3(-baseSize.x, -baseSize.y);
 			vertices[vIndex10] = pos + GetQuaternionEuler(rot) * new Vector3(baseSize.x, -baseSize.y);
 			vertices[vIndex11] = pos + GetQuaternionEuler(rot) * baseSize;
@@ -235,7 +346,7 @@ public class MeshUtils : MonoBehaviour
 			vertices[vIndex20] = pos + GetQuaternionEuler(rot) * new Vector3(-baseSize.x, baseSize.y);
 			vertices[vIndex21] = pos + GetQuaternionEuler(rot) * new Vector3(-baseSize.x, -baseSize.y);
 			vertices[vIndex22] = pos + GetQuaternionEuler(rot) * new Vector3(baseSize.x, -baseSize.y);
-			vertices[vIndex23] = pos + GetQuaternionEuler(rot) * baseSize;*/
+			vertices[vIndex23] = pos + GetQuaternionEuler(rot) * baseSize;*//*
 		}
 		else
 		{
@@ -253,7 +364,7 @@ public class MeshUtils : MonoBehaviour
 			vertices[vIndex2] = pos + GetQuaternionEuler(rot - 90) * baseSize;
 			vertices[vIndex3] = pos + GetQuaternionEuler(rot - 0) * baseSize;
 
-			/*vertices[vIndex8] = pos + GetQuaternionEuler(rot - 270) * baseSize;
+			*//*vertices[vIndex8] = pos + GetQuaternionEuler(rot - 270) * baseSize;
 			vertices[vIndex9] = pos + GetQuaternionEuler(rot - 180) * baseSize;
 			vertices[vIndex10] = pos + GetQuaternionEuler(rot - 90) * baseSize;
 			vertices[vIndex11] = pos + GetQuaternionEuler(rot - 0) * baseSize;
@@ -271,7 +382,7 @@ public class MeshUtils : MonoBehaviour
 			vertices[vIndex20] = pos + GetQuaternionEuler(rot - 270) * baseSize;
 			vertices[vIndex21] = pos + GetQuaternionEuler(rot - 180) * baseSize;
 			vertices[vIndex22] = pos + GetQuaternionEuler(rot - 90) * baseSize;
-			vertices[vIndex23] = pos + GetQuaternionEuler(rot - 0) * baseSize;*/
+			vertices[vIndex23] = pos + GetQuaternionEuler(rot - 0) * baseSize;*//*
 		}
 
 		//Relocate UVs
@@ -286,7 +397,7 @@ public class MeshUtils : MonoBehaviour
 		uvs[vIndex2] = new Vector2(uv11.x, uv00.y);
 		uvs[vIndex3] = new Vector2(uv11.x, uv11.y);
 
-		/*uvs[vIndex8] = new Vector3(uv00.x, uv11.y);
+		*//*uvs[vIndex8] = new Vector3(uv00.x, uv11.y);
 		uvs[vIndex9] = new Vector3(uv00.x, uv00.y);
 		uvs[vIndex10] = new Vector3(uv11.x, uv00.y);
 		uvs[vIndex11] = new Vector3(uv11.x, uv11.y);
@@ -304,7 +415,7 @@ public class MeshUtils : MonoBehaviour
 		uvs[vIndex20] = new Vector3(uv00.x, uv11.y);
 		uvs[vIndex21] = new Vector3(uv00.x, uv00.y);
 		uvs[vIndex22] = new Vector3(uv11.x, uv00.y);
-		uvs[vIndex23] = new Vector3(uv11.x, uv11.y);*/
+		uvs[vIndex23] = new Vector3(uv11.x, uv11.y);*//*
 
 		int tIndex = index * 6;
 
@@ -327,7 +438,7 @@ public class MeshUtils : MonoBehaviour
 		triangles[tIndex + 11] = vIndex0;
 
 		//? no effect, might be squished sideways same for rest //might be wrong wise //testing a bunch had no effect
-		/*triangles[tIndex + 12] = vIndex8;//10
+		*//*triangles[tIndex + 12] = vIndex8;//10
 		triangles[tIndex + 13] = vIndex9;//9
 		triangles[tIndex + 14] = vIndex10;//8
 
@@ -360,6 +471,6 @@ public class MeshUtils : MonoBehaviour
 
 		triangles[tIndex + 33] = vIndex0;//4
 		triangles[tIndex + 34] = vIndex3;//3
-		triangles[tIndex + 35] = vIndex2;//0*/
-	}
+		triangles[tIndex + 35] = vIndex2;//0*//*
+	}*/
 }

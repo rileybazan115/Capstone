@@ -29,7 +29,7 @@ public class SpherecastPerception : Perception
 				if (tagName == "" || raycastHit.collider.CompareTag(tagName))
 				{
 					Debug.DrawRay(ray.origin, ray.direction * raycastHit.distance, Color.red);
-					Debug.Log("enemy seen");
+					//Debug.Log("enemy seen");
 					detectionFloat += 1;
 					enemies.Add(raycastHit.collider.gameObject);
 					/*if (detectionFloat == 100)

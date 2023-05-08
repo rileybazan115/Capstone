@@ -44,7 +44,7 @@ public class SeekState : State
 		GetLowestValue(out lowestValue, out lowestValuePosition);
 		owner.movement.MoveTowards(lowestValuePosition);
 
-		Debug.Log(lowestValue + " " + lowestValuePosition);
+		//Debug.Log(lowestValue + " " + lowestValuePosition);
 	}
 
 	public void GetLowestValue(out int lowestValue, out Vector3 lowestValuePosition)

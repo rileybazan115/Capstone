@@ -36,7 +36,7 @@ public class PlayerMovement : MonoBehaviour
 		playerCamera.fieldOfView = playerFOV;
 
 		playerInput.SwitchCurrentControlScheme("KeyboardAndMouse", Keyboard.current, Mouse.current);
-		Debug.Log(playerInput.currentControlScheme);
+		//Debug.Log(playerInput.currentControlScheme);
 	}
 
 	void Update()

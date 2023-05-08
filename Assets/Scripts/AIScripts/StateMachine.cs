@@ -55,7 +55,7 @@ public class StateMachine
 
     public void AddTransition(string stateFrom, Transition transition, string stateTo)
 	{
-        Debug.Log(StateFromName(stateFrom));
+        //Debug.Log(StateFromName(stateFrom));
         if (stateTransitions.ContainsKey(StateFromName(stateFrom)))
 		{
             var transitions = stateTransitions[StateFromName(stateFrom)];

@@ -4,7 +4,58 @@ using UnityEngine;
 
 public class TestingMesh : MonoBehaviour
 {
-    private void Start()
+	private void Start()
+	{
+		Vector3[] vertices =
+		{
+			new Vector3(0, 0, 0),
+			new Vector3(1, 0, 0),
+			new Vector3(1, 1, 0),
+			new Vector3(0, 1, 0),
+			new Vector3(0, 1, 1),
+			new Vector3(1, 1, 1),
+			new Vector3(1, 0, 1),
+			new Vector3(0, 0, 1)
+		};
+
+		Vector2[] uv =
+		{
+			new Vector2(0, 0),
+			new Vector2(1, 0),
+			new Vector2(1, 1),
+			new Vector2(0, 1),
+			new Vector2(0, 1),
+			new Vector2(1, 1),
+			new Vector2(1, 0),
+			new Vector2(0, 0)
+		};
+
+		int[] triangles =
+		{
+			0, 2, 1, // front
+			0, 3, 2,
+			2, 3, 4, // back
+			2, 4, 5,
+			1, 2, 5, //face right
+			1, 5, 6,
+			0, 7, 4, //face left
+			0, 4, 3,
+			5, 4, 7, //face back
+			5, 7, 6,
+			0, 6, 7, //face bottom
+			0, 1, 6
+		};
+
+		Mesh mesh = GetComponent<MeshFilter>().mesh;
+		mesh.Clear();
+		mesh.vertices = vertices;
+		mesh.triangles = triangles;
+		mesh.uv = uv;
+		mesh.Optimize();
+		mesh.RecalculateNormals();
+	}
+
+	/*private void Start()
     {
 		//all corrdinates are clockwise
 		//cube
@@ -163,42 +214,6 @@ public class TestingMesh : MonoBehaviour
 
 		GetComponent<MeshFilter>().mesh = mesh;
 		GetComponent<MeshCollider>().sharedMesh = mesh;
-
-
-
-
-		/*//square
-		Mesh mesh = new Mesh();
-
-		Vector3[] vertices = new Vector3[4];
-		Vector2[] uv = new Vector2[4];
-		int[] triangles = new int[6];
-
-		vertices[0] = new Vector3(0, 0);
-		vertices[1] = new Vector3(0, 10);
-		vertices[2] = new Vector3(10, 10);
-		vertices[3] = new Vector3(10, 0);
-
-		uv[0] = new Vector3(0, 0, 0);
-		uv[1] = new Vector3(0, 1, 0);
-		uv[2] = new Vector3(1, 1, 0);
-		uv[3] = new Vector3(1, 0, 0);
-
-		//set triangles to clockwise to have it front facing
-		triangles[0] = 0;
-		triangles[1] = 1;
-		triangles[2] = 2;
-
-		triangles[3] = 0;
-		triangles[4] = 2;
-		triangles[5] = 3;
-
-
-		mesh.vertices = vertices;
-		mesh.uv = uv;
-		mesh.triangles = triangles;
-
-		GetComponent<MeshFilter>().mesh = mesh;*/
-	}
+	}*/
 
 }

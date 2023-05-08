@@ -21,8 +21,8 @@ public class HeatMapGenericVisual : MonoBehaviour
 	public void SetGrid(Grid<HeatMapGridObject> grid)
 	{
 		this.grid = grid;
-		//UpdateHeatMapVisual();
-		UpdateHeatMapGO();
+		UpdateHeatMapVisual();
+		//UpdateHeatMapGO();
 
 		grid.OnGridObjectChanged += Grid_OnGridObjectChanged;
 	}
@@ -38,7 +38,9 @@ public class HeatMapGenericVisual : MonoBehaviour
 				{
 					for (int k = 0; k < grid.GetWidth(); k++)
 					{
-						grid.GetGridObject(i, j, k).SetValue(grid.GetGridObject(i, j, k).GetValue() - 100);
+						//temp if
+						if (grid.GetGridObject(i, j, k).GetValue() <= 0) grid.GetGridObject(i, j, k).SetValue(100);
+						grid.GetGridObject(i, j, k).SetValue(grid.GetGridObject(i, j, k).GetValue() - 1);
 					}	
 				}
 			}
@@ -48,11 +50,12 @@ public class HeatMapGenericVisual : MonoBehaviour
 
 	private void Grid_OnGridObjectChanged(object sender, Grid<HeatMapGridObject>.OnGridObjectChangedEventArgs e)
 	{
-		Debug.Log("Grid_OnGridValueChanged");
+		//Debug.Log("Grid_OnGridValueChanged");
 		//UpdateHeatMapVisual();
-		UpdateHeatMapGO();
+		//UpdateHeatMapGO();
 	}
 
+	//uses prefab
 	private void UpdateHeatMapGO()
 	{
 		if (goGrid.Count > 0)
@@ -63,7 +66,7 @@ public class HeatMapGenericVisual : MonoBehaviour
 			}
 			goGrid.Clear();
 		}
-		
+
 		for (int x = 0; x < grid.GetWidth(); x++)
 		{
 			for (int y = 0; y < grid.GetHeight(); y++)
@@ -77,7 +80,7 @@ public class HeatMapGenericVisual : MonoBehaviour
 					float gridValueNormalized = gridObject.GetValueNormalized();
 					Vector2 gridValueUV = new Vector2(gridValueNormalized, 0f);
 
-					GameObject go = Instantiate(prefab, grid.GetWorldPosition(x, y, z) + quadSize * 0.5f,  Quaternion.identity, transform);
+					GameObject go = Instantiate(prefab, grid.GetWorldPosition(x, y, z) + quadSize * 0.5f, Quaternion.identity, transform);
 					go.transform.localScale = Vector3.one * grid.GetCellSize();
 
 					go.GetComponent<Renderer>().material.SetColor("_Color", Color.HSVToRGB(gridValueNormalized, 1, 1));
@@ -86,8 +89,32 @@ public class HeatMapGenericVisual : MonoBehaviour
 				}
 			}
 		}
+		/*for (int x = 0; x < grid.GetWidth(); x++)
+		{
+			for (int y = 0; y < grid.GetHeight(); y++)
+			{
+				for (int z = 0; z < grid.GetDepth(); z++)
+				{
+					*//*int index = x * grid.GetHeight() * grid.GetDepth() + y * grid.GetDepth() + z;
+					Vector3 quadSize = new Vector3(1, 1, 1) * grid.GetCellSize();*//*
+
+					HeatMapGridObject gridObject = grid.GetGridObject(x, y, z);
+					float gridValueNormalized = gridObject.GetValueNormalized();
+					gridObject.GetComponent<Renderer>().material.SetColor("_Color", Color.HSVToRGB(gridValueNormalized, 1, 1));
+					//Vector2 gridValueUV = new Vector2(gridValueNormalized, 0f);
+
+					*//*GameObject go = Instantiate(prefab, grid.GetWorldPosition(x, y, z) + quadSize * 0.5f, Quaternion.identity, transform);
+					go.transform.localScale = Vector3.one * grid.GetCellSize();*//*
+
+					//go.GetComponent<Renderer>().material.SetColor("_Color", Color.HSVToRGB(gridValueNormalized, 1, 1));
+
+					//goGrid.Add(go);
+				}
+			}
+		}*/
 	}
 
+	//uses meshes
 	private void UpdateHeatMapVisual()
 	{
 		MeshUtils.CreateEmptyMeshArrays3d(grid.GetWidth() * grid.GetHeight() * grid.GetDepth(), out Vector3[] vertices, out Vector2[] uvs, out int[] triangles);
@@ -99,7 +126,7 @@ public class HeatMapGenericVisual : MonoBehaviour
 				for (int z = 0; z < grid.GetDepth(); z++)
 				{
 					int index = x * grid.GetHeight() * grid.GetDepth() + y * grid.GetDepth() + z;
-					Vector3 quadSize = new Vector3(1, 1) * grid.GetCellSize();
+					Vector3 quadSize = new Vector3(1, 1, 1) * grid.GetCellSize();
 
 					HeatMapGridObject gridObject = grid.GetGridObject(x, y, z);
 					float gridValueNormalized = gridObject.GetValueNormalized();
@@ -113,5 +140,6 @@ public class HeatMapGenericVisual : MonoBehaviour
 		mesh.vertices = vertices;
 		mesh.uv = uvs;
 		mesh.triangles = triangles;
+		
 	}
 }

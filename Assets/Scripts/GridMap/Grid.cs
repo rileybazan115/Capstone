@@ -59,20 +59,30 @@ public class Grid<TGridObject>
 					Debug.DrawLine(GetWorldPosition(x, y, z), GetWorldPosition(x + 1, y, z), Color.white, 100f);
 					Debug.DrawLine(GetWorldPosition(x, y, z), GetWorldPosition(x, y, z + 1), Color.white, 100f);*/
 
+					//top
 					Debug.DrawLine(GetWorldPosition(x, y + 1, z), GetWorldPosition(x, y + 1, z + 1), Color.white, 100f);
 					Debug.DrawLine(GetWorldPosition(x, y + 1, z), GetWorldPosition(x + 1, y + 1, z), Color.white, 100f);
+					Debug.DrawLine(GetWorldPosition(x, y + 1, z + 1), GetWorldPosition(x + 1, y + 1, z + 1), Color.white, 100f);
+					Debug.DrawLine(GetWorldPosition(x + 1, y + 1, z), GetWorldPosition(x + 1, y + 1, z + 1), Color.white, 100f);
+
+					//bottom
+					Debug.DrawLine(GetWorldPosition(x, y, z), GetWorldPosition(x, y, z + 1), Color.white, 100f);
+					Debug.DrawLine(GetWorldPosition(x, y, z), GetWorldPosition(x + 1, y, z), Color.white, 100f);
+					Debug.DrawLine(GetWorldPosition(x, y, z + 1), GetWorldPosition(x + 1, y, z + 1), Color.white, 100f);
+					Debug.DrawLine(GetWorldPosition(x + 1, y, z), GetWorldPosition(x + 1, y, z + 1), Color.white, 100f);
+
+					//Left
+					Debug.DrawLine(GetWorldPosition(x, y, z), GetWorldPosition(x, y + 1, z), Color.white, 100f);
+
+					//right
+					Debug.DrawLine(GetWorldPosition(x + 1, y, z), GetWorldPosition(x + 1, y + 1, z), Color.white, 100f);
+
+					//back
+					Debug.DrawLine(GetWorldPosition(x, y, z + 1), GetWorldPosition(x, y + 1, z + 1), Color.white, 100f);
+					Debug.DrawLine(GetWorldPosition(x + 1, y, z + 1), GetWorldPosition(x + 1, y + 1, z + 1), Color.white, 100f);
 				}
 			}
 		}
-		
-		//Debug.DrawLine(GetWorldPosition(width, 0, 0), GetWorldPosition(width, height, 0), Color.white, 100f);
-		//Debug.DrawLine(GetWorldPosition(width, 0, 0), GetWorldPosition(width, 0, depth), Color.white, 100f);
-		Debug.DrawLine(GetWorldPosition(width, height, 0), GetWorldPosition(width, height, depth), Color.white, 100f);
-		//Debug.DrawLine(GetWorldPosition(width, 0, depth), GetWorldPosition(width, height, depth), Color.white, 100f);
-		//Debug.DrawLine(GetWorldPosition(0, height, 0), GetWorldPosition(0, height, depth), Color.white, 100f);
-		Debug.DrawLine(GetWorldPosition(width, height, depth), GetWorldPosition(0, height, depth), Color.white, 100f);
-		//Debug.DrawLine(GetWorldPosition(width, 0, depth), GetWorldPosition(0, 0, depth), Color.white, 100f);
-		//Debug.DrawLine(GetWorldPosition(0, 0, depth), GetWorldPosition(0, height, depth), Color.white, 100f);
 
 		OnGridObjectChanged += (object sender, OnGridObjectChangedEventArgs eventArgs) =>
 		{
